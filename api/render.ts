@@ -6,9 +6,9 @@
 // Prompts are built here on the server from the choices, never sent by the client.
 
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { buildPlan, ELEMENT_IDS, type Choices } from "../lib/plan";
-import { SYSTEM, type Facts } from "../lib/prompts";
-import { callGemini, IMAGE_MODEL, splitDataUrl, UpstreamError } from "../lib/gemini";
+import { buildPlan, ELEMENT_IDS, type Choices } from "../lib/plan.js";
+import { SYSTEM, type Facts } from "../lib/prompts.js";
+import { callGemini, IMAGE_MODEL, splitDataUrl, UpstreamError } from "../lib/gemini.js";
 
 export const config = { maxDuration: 60 };
 

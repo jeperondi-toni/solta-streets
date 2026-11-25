@@ -5,7 +5,7 @@
 // the /?claim=<id> page (see README).
 
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { splitDataUrl } from "../lib/gemini";
+import { splitDataUrl } from "../lib/gemini.js";
 
 export const config = { maxDuration: 30 };
 

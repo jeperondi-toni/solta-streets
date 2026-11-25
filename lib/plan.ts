@@ -5,7 +5,7 @@
 // with the original photo sent as reference (attention budget: max 4 changes
 // per render). Rules: claude/MOBILITY_RENDER_RULES.md (Hidalgo project).
 
-import { ELEMENTS, ENDING, scenarioPrompts, type Facts } from "./prompts";
+import { ELEMENTS, ENDING, scenarioPrompts, type Facts } from "./prompts.js";
 
 export type Cars = "keep" | "calm" | "carfree";
 export type ElementId = keyof typeof ELEMENTS;

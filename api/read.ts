@@ -3,7 +3,7 @@
 // The user confirms or changes these on the choices page.
 
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { callGemini, READ_MODEL, splitDataUrl, UpstreamError } from "../lib/gemini";
+import { callGemini, READ_MODEL, splitDataUrl, UpstreamError } from "../lib/gemini.js";
 
 export const config = { maxDuration: 30 };
 

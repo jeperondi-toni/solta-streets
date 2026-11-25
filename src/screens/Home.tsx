@@ -42,11 +42,11 @@ export default function Home({ onStart, openMenu }: { onStart: (photo: string, s
               <button className="link" onClick={() => openMenu("who")}>Who we are →</button>
             </p>
           </div>
-          <div>
-            {video && <video className="hero-video" autoPlay muted loop playsInline poster="/hero-poster.jpg" aria-label="A street changing from today to what it could be" style={{ width: "100%", borderRadius: 18, background: "var(--soft)", aspectRatio: "4 / 3", objectFit: "cover" }}>
+          {video && <div>
+            <video className="hero-video" autoPlay muted loop playsInline poster="/hero-poster.jpg" aria-label="A street changing from today to what it could be" style={{ width: "100%", borderRadius: 18, background: "var(--soft)", aspectRatio: "4 / 3", objectFit: "cover" }}>
               <source src="/hero.mp4" type="video/mp4" onError={() => setVideo(false)} />
-            </video>}
-          </div>
+            </video>
+          </div>}
         </section>
         <section className="how" id="how">
           <div className="wrap">

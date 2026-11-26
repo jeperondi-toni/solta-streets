@@ -136,3 +136,32 @@ h2.q { margin: 0 0 6px; font-size: 30px; }
 .menu ol li { display: grid; grid-template-columns: 48px 1fr; gap: 12px; }
 .menu ol li > span { font-size: 26px; font-weight: 700; color: var(--green); }
 .menu p { margin: 0; color: var(--ink-2); }
+
+/* Result hierarchy: photo + share, what changed, community */
+.photo-block { display: flex; flex-direction: column; gap: 0; }
+.photo-block .compare { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+.sharebar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px; background: var(--ink); color: #FFFFFF; padding: 22px 26px; border-radius: 0 0 18px 18px; }
+.sharebar h2 { margin: 0 0 4px; font-size: 28px; }
+.sharebar p { margin: 0; color: rgba(255,255,255,.75); font-size: 16px; max-width: 460px; }
+.sharebar .btn.ghost { background: transparent; color: #FFFFFF; border-color: rgba(255,255,255,.7); }
+.changed a { font-weight: 700; white-space: nowrap; }
+.community { border-radius: 24px; overflow: hidden; border: 1px solid var(--line); }
+.community-head { background: var(--ink); color: #FFFFFF; padding: 32px 32px 24px; }
+.community-head h2 { margin: 0 0 8px; font-size: 30px; }
+.community-head p { margin: 0; color: rgba(255,255,255,.75); font-size: 17px; line-height: 1.5; max-width: 620px; }
+.community-body { padding: 28px 32px 32px; display: flex; flex-direction: column; gap: 22px; }
+.feats { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; font-size: 16px; }
+.feats li { display: flex; gap: 10px; align-items: center; }
+.feats span { flex: none; width: 24px; height: 24px; border-radius: 50%; background: var(--lime-soft); color: var(--green); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; }
+.btn.big { min-height: 68px; font-size: 21px; width: 100%; }
+.pinned { position: relative; height: 320px; background: var(--ink); overflow: hidden; }
+.pinned.small { height: 220px; border-radius: 16px; }
+.pinned img { width: 100%; height: 100%; object-fit: cover; opacity: .9; }
+.pin { position: absolute; transform: translate(-50%, -50%); display: flex; align-items: center; gap: 8px; opacity: 0; animation: pin-in .4s ease-out forwards; }
+.pin .dot { width: 34px; height: 34px; border-radius: 50%; border: 3px solid #FFFFFF; color: #FFFFFF; font-weight: 700; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,.3); font-family: system-ui, sans-serif; }
+.pin .bubble { background: #FFFFFF; color: var(--ink); font-size: 14px; font-weight: 700; padding: 6px 10px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,.2); white-space: nowrap; }
+@keyframes pin-in { from { opacity: 0; transform: translate(-50%, -30%) scale(.6); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
+@media (prefers-reduced-motion: reduce) { .pin { animation: none; opacity: 1; } }
+.pinned-cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 14px; text-align: center; color: rgba(255,255,255,.9); font-size: 14px; background: linear-gradient(transparent, rgba(0,0,0,.55)); }
+.dialog.wide { max-width: 620px; }
+@media (max-width: 640px) { .pin .bubble { display: none; } .sharebar .actions { width: 100%; } }

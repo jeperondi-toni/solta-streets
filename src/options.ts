@@ -10,7 +10,7 @@ export const CARS: { id: Cars; step: string; title: string; desc: string; incl: 
   { id: "carfree", step: "3 · The big change", title: "Car-free", desc: "A level street for people, with one bike path. Deliveries at set hours.", incl: "No kerbs · no parking · tram kept" },
 ];
 
-export interface Item { id: string; title: string; desc: string; t: StreetType[] }
+export interface Item { id: string; title: string; desc: string; t: StreetType[]; learn?: string } // learn: link to best practices (to come)
 export interface Category { key: string; name: string; color: string; icon: string; items: Item[] }
 
 const R: StreetType = "residential", H: StreetType = "high", ALL = [R, H];

@@ -29,9 +29,31 @@ function Compare({ before, after }: { before: string; after: string }) {
   );
 }
 
+const PINS = [
+  { left: "30%", top: "62%", color: "#22a35a", label: "+", text: "Love the benches" },
+  { left: "54%", top: "40%", color: "#e0a100", label: "!", text: "A tree here?" },
+  { left: "68%", top: "70%", color: "#d23c2c", label: "−", text: "Where do vans unload?" },
+];
+
+function Pinned({ image, small }: { image: string; small?: boolean }) {
+  return (
+    <div className={"pinned" + (small ? " small" : "")}>
+      <img src={image} alt="" />
+      {PINS.map((p, i) => (
+        <div key={i} className="pin" style={{ left: p.left, top: p.top, animationDelay: `${0.4 + i * 0.5}s` }}>
+          <span className="dot" style={{ background: p.color }}>{p.label}</span>
+          {!small && <span className="bubble">{p.text}</span>}
+        </div>
+      ))}
+      <div className="pinned-cap">People tap on the image to leave feedback</div>
+    </div>
+  );
+}
+
 export default function Result({ w, onChange, onAnother, openMenu }: { w: Work; onChange: () => void; onAnother: () => void; openMenu: (p: string) => void }) {
   const [busy, setBusy] = useState("");
   const [msg, setMsg] = useState("");
+  const [ask, setAsk] = useState(false);
   const street = w.street || "our street";
   const shareText = `This could be ${street}. What do you think?`;
   const car = CARS.find((c) => c.id === w.cars)!;
@@ -75,42 +97,72 @@ export default function Result({ w, onChange, onAnother, openMenu }: { w: Work; 
           {w.street && <p className="muted" style={{ margin: "0 0 6px" }}>{w.street}</p>}
           <h1>This could be <mark>your street.</mark></h1>
         </div>
-        <Compare before={w.photo} after={w.result} />
-        {msg && <p className="error" role="alert">{msg}</p>}
-        <div className="panels">
-          <section className="panel">
-            <h2>What does your community think?</h2>
-            <p>Share the image and ask. People tap on it to say what they like, what they don’t, or leave an idea — by text or voice. They don’t need an account.</p>
-            <div className="actions"><button className="btn" onClick={chorus} disabled={!!busy}>{busy === "chorus" ? "Opening Chorus…" : "Ask my community"}</button></div>
-            <p className="muted">Feedback by Chorus, from Solta. You’ll confirm your email there — no password.</p>
-          </section>
-          <section className="panel">
-            <h2>Share it</h2>
-            <p>The image is your invitation. Every share brings more people in — and more voices make a stronger case with the city.</p>
-            <div className="actions">
-              <button className="btn small" onClick={share} disabled={!!busy}>Share image</button>
-              <button className="btn ghost small" onClick={download} disabled={!!busy}>Download image</button>
-              <a className="btn ghost small" href={`https://wa.me/?text=${encodeURIComponent(shareText)}`} target="_blank" rel="noopener">WhatsApp</a>
+
+        <div className="photo-block">
+          <Compare before={w.photo} after={w.result} />
+          <section className="sharebar" aria-labelledby="share-t">
+            <div>
+              <h2 id="share-t">Share it</h2>
+              <p>Every share brings more people in — and more voices make a stronger case with the city.</p>
             </div>
-            <p className="muted">The image comes ready for social media, with today and could-be side by side.</p>
+            <div className="actions">
+              <button className="btn" onClick={share} disabled={!!busy}>Share image</button>
+              <a className="btn ghost" href={`https://wa.me/?text=${encodeURIComponent(shareText)}`} target="_blank" rel="noopener">WhatsApp</a>
+              <button className="btn ghost" onClick={download} disabled={!!busy}>Download</button>
+            </div>
           </section>
+          {msg && <p className="error" role="alert">{msg}</p>}
         </div>
+
         <section className="panel">
           <h2>What changed</h2>
           <ul className="changed">
             <li><b>{car.title}</b> — {car.desc}</li>
-            {w.picks.map((id) => <li key={id}><b>{ITEM[id]?.title}</b> — {ITEM[id]?.desc}</li>)}
+            {w.picks.map((id) => {
+              const it = ITEM[id];
+              return <li key={id}><b>{it?.title}</b> — {it?.desc}{it?.learn && <> <a href={it.learn} target="_blank" rel="noopener">Best practices →</a></>}</li>;
+            })}
             {w.other.trim() && <li><b>Your idea</b> — {w.other.trim()}</li>}
           </ul>
           <p className="note"><b>Don’t forget:</b> crossings and sidewalks should work for everyone — wheelchairs, prams, people who walk slowly. Level kerbs and ramps are too small to see in the image, but they belong in the plan.</p>
           <p className="muted">This image is made by AI from your photo. It shows an idea, not a finished design.</p>
         </section>
+
+        <section className="community" aria-labelledby="comm-t">
+          <div className="community-head">
+            <h2 id="comm-t">What does your community think?</h2>
+            <p>Ask your neighbours to tap on the image: what they like, what they don’t, and their own ideas — by text or voice. No account needed.</p>
+          </div>
+          <Pinned image={w.result} />
+          <div className="community-body">
+            <ul className="feats">
+              {["Live pin map on the image", "AI summary of themes and ideas", "Filter by like, dislike and idea", "A report to take to the city"].map((f) => <li key={f}><span aria-hidden="true">✓</span>{f}</li>)}
+            </ul>
+            <button className="btn big" onClick={() => setAsk(true)}>Ask my community →</button>
+          </div>
+        </section>
+
         <div className="actions">
           <button className="btn ghost" onClick={onChange}>← Change my choices</button>
           <button className="btn ghost" onClick={onAnother}>Try another street</button>
           <button className="btn ghost" onClick={() => openMenu("steps")}>What can I do next?</button>
         </div>
       </main>
+
+      {ask && (
+        <div className="overlay" onClick={() => setAsk(false)}>
+          <div className="dialog wide" role="dialog" aria-modal="true" aria-labelledby="ask-t" onClick={(e) => e.stopPropagation()}>
+            <Pinned image={w.result} small />
+            <h3 id="ask-t">Collect feedback on your street</h3>
+            <p style={{ margin: 0, fontSize: 17, lineHeight: 1.5 }}>We open Chorus, Solta’s feedback tool, with your image. Confirm your email there — no password — and you get a link to share and your own dashboard with everything people say.</p>
+            {msg && <p className="error" role="alert">{msg}</p>}
+            <div className="actions">
+              <button className="btn" onClick={chorus} disabled={!!busy}>{busy === "chorus" ? "Opening Chorus…" : "Continue to Chorus →"}</button>
+              <button className="btn ghost" onClick={() => setAsk(false)}>Not now</button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

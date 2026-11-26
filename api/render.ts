@@ -28,7 +28,8 @@ function parseFacts(f: any): Facts {
 function parseChoices(c: any): Choices {
   return {
     cars: c?.cars === "keep" || c?.cars === "calm" ? c.cars : "carfree",
-    elements: Array.isArray(c?.elements) ? c.elements.filter((e: string) => (ELEMENT_IDS as string[]).includes(e)).slice(0, 9) : [],
+    bikes: ["none", "painted", "protected", "path", "nopath"].includes(c?.bikes) ? c.bikes : undefined,
+    elements: Array.isArray(c?.elements) ? c.elements.filter((e: string) => (ELEMENT_IDS as string[]).includes(e)).slice(0, 15) : [],
     other: typeof c?.other === "string" ? c.other : "",
   };
 }

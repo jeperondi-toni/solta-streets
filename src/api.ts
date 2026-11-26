@@ -23,7 +23,7 @@ async function post<T>(path: string, body: unknown): Promise<T> {
 
 export const readStreet = (image: string) => post<{ facts: Facts }>("/api/read", { image }).then((r) => r.facts);
 
-export function renderStep(facts: Facts, choices: { cars: string; elements: string[]; other: string }, step: number, image: string, reference?: string) {
+export function renderStep(facts: Facts, choices: { cars: string; bikes: string; elements: string[]; other: string }, step: number, image: string, reference?: string) {
   const f = { ...facts, parking: facts.parking === "none" ? false : facts.parking };
   return post<{ image: string; steps: number }>("/api/render", { facts: f, choices, step, image, reference });
 }

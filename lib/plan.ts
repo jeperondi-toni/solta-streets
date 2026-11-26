@@ -5,13 +5,20 @@
 // with the original photo sent as reference (attention budget: max 4 changes
 // per render). Rules: claude/MOBILITY_RENDER_RULES.md (Hidalgo project).
 
-import { ELEMENTS, ENDING, scenarioPrompts, type Facts } from "./prompts.js";
+import { ELEMENTS as CALIBRATED, ENDING, scenarioPrompts, type Facts } from "./prompts.js";
+import { EXTRA } from "./extra.js";
+import { bikeLanes, carfreeNoPath } from "./bikes.js";
+
+// Calibrated rules win over first drafts when both exist.
+const ELEMENTS = { ...EXTRA, ...CALIBRATED } as Record<string, any>;
 
 export type Cars = "keep" | "calm" | "carfree";
-export type ElementId = keyof typeof ELEMENTS;
+export type ElementId = string;
+export type Bikes = "none" | "painted" | "protected" | "path" | "nopath";
 
 export interface Choices {
   cars: Cars;
+  bikes?: Bikes;
   elements: ElementId[];
   other?: string; // "Something else you'd like to see?" free text
 }
@@ -21,15 +28,20 @@ export interface Step {
   withReference: boolean; // true from step 2 on: the original photo goes along
 }
 
-export const ELEMENT_IDS = Object.keys(ELEMENTS) as ElementId[];
+export const ELEMENT_IDS = Object.keys(ELEMENTS);
 const GROUP = 3;
 
 const clean = (t: string) => t.replace(/[`<>{}]/g, "").replace(/\s+/g, " ").trim().slice(0, 240);
 
 export function buildPlan(facts: Facts, choices: Choices): Step[] {
   const sc = scenarioPrompts(facts);
-  const first = { keep: sc.keep, calm: sc.calm, carfree: sc.carfree }[choices.cars];
+  const carfree = choices.bikes === "nopath" ? sc.intro + carfreeNoPath(sc.s3) : sc.carfree;
+  const first = { keep: sc.keep, calm: sc.calm, carfree }[choices.cars];
   const steps: Step[] = [{ prompt: first + ENDING, withReference: false }];
+  // Bike lanes only go with "Same traffic", as their own step right after it.
+  if (choices.cars === "keep" && (choices.bikes === "painted" || choices.bikes === "protected")) {
+    steps.push({ prompt: bikeLanes(facts, choices.bikes, sc.keepInfra, sc.keepClear) + ENDING, withReference: true });
+  }
 
   const els = choices.elements.filter((e) => e in ELEMENTS);
   const other = choices.other ? clean(choices.other) : "";
@@ -44,7 +56,7 @@ export function buildPlan(facts: Facts, choices: Choices): Step[] {
   // "Same traffic" keeps the street as it is, so elements use their stand-alone
   // wording; Slow street and Car-free have widened sidewalks to place them on.
   const wording = (id: ElementId) => {
-    const el = ELEMENTS[id] as any;
+    const el = ELEMENTS[id];
     return choices.cars === "keep" ? el.alone(facts) : el.after(facts);
   };
 

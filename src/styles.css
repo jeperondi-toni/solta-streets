@@ -169,3 +169,8 @@ h2.q { margin: 0 0 6px; font-size: 30px; }
 .read .summary { margin: 0; font-size: 15px; line-height: 1.55; color: var(--ink-2); }
 .read .summary b { color: var(--ink); font-weight: 700; }
 .read .summary .link { font-size: 15px; }
+
+.bikes { display: flex; flex-direction: column; gap: 10px; margin: -16px 0 36px; padding: 18px; border-radius: 16px; background: var(--soft); }
+.bikes h3 { margin: 0; font-size: 20px; }
+.radios.small { margin: 0; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.radios.small .radio strong { font-size: 17px; }

@@ -1,6 +1,7 @@
 // Render prompts for the street tool. Ported from the calibrated test page
 // (solta repo, branch mobility-test-round1, public/mobility-test/index.html).
 // Rules and their reasons: claude/MOBILITY_RENDER_RULES.md in the Hidalgo project.
+// Change rules on the test page first, test, then port here.
 /* eslint-disable */
 // @ts-nocheck
 
@@ -106,7 +107,7 @@ ZONES:
 - CENTRE: the darker grey bike path, full visible length, narrow compared to the walking area, smaller with perspective.
 - LEFT and RIGHT: the level walking area, one paving material up to the buildings.
 - FAR END OF THE STREET: cars removed, the same level paving continues.${keepInfra}${keepClear}`;
-  return { intro, keepInfra, keepClear, keep: intro + s1, calm: intro + s2, carfree: intro + s3 };
+  return { intro, keepInfra, keepClear, s1, s2, s3, keep: intro + s1, calm: intro + s2, carfree: intro + s3 };
 }
 
 export const ELEMENTS = {

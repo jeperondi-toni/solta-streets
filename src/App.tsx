@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { readStreet, renderStep, type Facts } from "./api";
 import { toJpeg } from "./image";
-import { defaultPicks, type Cars } from "./options";
+import { defaultPicks, type Bikes, type Cars } from "./options";
 import Home from "./screens/Home";
 import Choose from "./screens/Choose";
 import Making from "./screens/Making";
@@ -16,12 +16,13 @@ export interface Work {
   facts: Facts | null;    // hidden reading, confirmed on the choices page
   readError: string;
   cars: Cars;
+  bikes: Bikes;
   picks: string[];
   other: string;
   result: string;         // final image
 }
 
-const EMPTY: Work = { photo: "", street: "", facts: null, readError: "", cars: "carfree", picks: [], other: "", result: "" };
+const EMPTY: Work = { photo: "", street: "", facts: null, readError: "", cars: "carfree", bikes: "path", picks: [], other: "", result: "" };
 const FALLBACK: Facts = { type: "residential", parking: "parallel", treeSide: "both", tram: false, desc: "" };
 
 export default function App() {
@@ -44,7 +45,7 @@ export default function App() {
     if (!w.facts) return;
     setScreen("making");
     setProgress({ step: 0, steps: 1, error: "" });
-    const choices = { cars: w.cars, elements: w.picks, other: w.other };
+    const choices = { cars: w.cars, bikes: w.bikes, elements: w.picks, other: w.other };
     try {
       let r = await renderStep(w.facts, choices, 0, w.photo);
       let image = r.image;

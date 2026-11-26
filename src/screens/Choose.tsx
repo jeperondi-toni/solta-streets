@@ -1,10 +1,10 @@
 import { useState } from "react";
 import type { Work } from "../App";
 import type { Facts } from "../api";
-import { CARS, CATEGORIES, ORDER, ITEM, defaultPicks, type StreetType } from "../options";
+import { BIKES, CARS, CATEGORIES, DEFAULT_BIKES, ORDER, ITEM, defaultPicks, type StreetType } from "../options";
 import Header from "./Header";
 
-const EXCLUSIVE: Record<string, string> = {};
+const EXCLUSIVE: Record<string, string> = { shopsasis: "stores", stores: "shopsasis" };
 
 export default function Choose({ w, setW, onMake, onBack, openMenu }: {
   w: Work; setW: React.Dispatch<React.SetStateAction<Work>>; onMake: () => void; onBack: () => void; openMenu: (p: string) => void;
@@ -18,7 +18,7 @@ export default function Choose({ w, setW, onMake, onBack, openMenu }: {
 
   const setFact = <K extends keyof Facts>(k: K, v: Facts[K]) => setW((p) => {
     const facts = { ...(p.facts as Facts), [k]: v };
-    return k === "type" ? { ...p, facts, picks: defaultPicks(v as StreetType), cars: "carfree" } : { ...p, facts };
+    return k === "type" ? { ...p, facts, picks: defaultPicks(v as StreetType), cars: "carfree", bikes: DEFAULT_BIKES.carfree } : { ...p, facts };
   });
   const toggle = (id: string) => setW((p) => {
     const has = p.picks.includes(id);
@@ -27,8 +27,9 @@ export default function Choose({ w, setW, onMake, onBack, openMenu }: {
     return { ...p, picks: has ? base.filter((x) => x !== id) : [...base, id] };
   });
 
-  const count = w.picks.length + 1 + (w.other.trim() ? 1 : 0);
-  const minutes = Math.max(1, Math.ceil((1 + Math.ceil((w.picks.length + (w.other.trim() ? 1 : 0)) / 3)) * 0.4));
+  const lanes = w.cars === "keep" && (w.bikes === "painted" || w.bikes === "protected") ? 1 : 0;
+  const count = w.picks.length + 1 + lanes + (w.other.trim() ? 1 : 0);
+  const minutes = Math.max(1, Math.ceil((1 + lanes + Math.ceil((w.picks.length + (w.other.trim() ? 1 : 0)) / 3)) * 0.4));
 
   return (
     <>
@@ -82,13 +83,27 @@ export default function Choose({ w, setW, onMake, onBack, openMenu }: {
 
         <div>
           <h2 className="q">How much room for cars?</h2>
-          <p className="muted" style={{ marginTop: 0, marginBottom: 16 }}>Each step already settles lanes, parking and bikes.</p>
+          <p className="muted" style={{ marginTop: 0, marginBottom: 16 }}>Each step settles lanes and parking.</p>
           <div className="radios" role="radiogroup" aria-label="How much room for cars?">
             {CARS.map((c) => (
-              <button key={c.id} role="radio" aria-checked={w.cars === c.id} className="radio" onClick={() => setW((p) => ({ ...p, cars: c.id }))}>
+              <button key={c.id} role="radio" aria-checked={w.cars === c.id} className="radio" onClick={() => setW((p) => ({ ...p, cars: c.id, bikes: DEFAULT_BIKES[c.id] }))}>
                 <span className="step">{c.step}</span><strong>{c.title}</strong><span>{c.desc}</span><span className="muted">{c.incl}</span>
               </button>
             ))}
+          </div>
+
+          <div className="bikes">
+            <h3>{BIKES[w.cars].question}</h3>
+            {BIKES[w.cars].note && <p className="muted" style={{ margin: 0 }}>{BIKES[w.cars].note}</p>}
+            {BIKES[w.cars].options.length > 0 && (
+              <div className="radios small" role="radiogroup" aria-label={BIKES[w.cars].question}>
+                {BIKES[w.cars].options.map((b) => (
+                  <button key={b.id} role="radio" aria-checked={w.bikes === b.id} className="radio" onClick={() => setW((p) => ({ ...p, bikes: b.id }))}>
+                    <strong>{b.title}</strong><span>{b.desc}</span>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           <h2 className="q">What would you love to see?</h2>

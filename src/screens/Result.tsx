@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import type { Work } from "../App";
 import { sendToChorus } from "../api";
 import { sideBySide } from "../image";
-import { CARS, ITEM } from "../options";
+import { BIKES, CARS, ITEM } from "../options";
 import Header from "./Header";
 
 function Compare({ before, after }: { before: string; after: string }) {
@@ -118,6 +118,7 @@ export default function Result({ w, onChange, onAnother, openMenu }: { w: Work; 
           <h2>What changed</h2>
           <ul className="changed">
             <li><b>{car.title}</b> — {car.desc}</li>
+            {(() => { const b = BIKES[w.cars].options.find((o) => o.id === w.bikes); return b && w.bikes !== "none" ? <li><b>{b.title}</b> — {b.desc}</li> : null; })()}
             {w.picks.map((id) => {
               const it = ITEM[id];
               return <li key={id}><b>{it?.title}</b> — {it?.desc}{it?.learn && <> <a href={it.learn} target="_blank" rel="noopener">Best practices →</a></>}</li>;

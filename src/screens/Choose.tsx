@@ -11,6 +11,7 @@ export default function Choose({ w, setW, onMake, onBack, openMenu }: {
 }) {
   const [open, setOpen] = useState<string[] | null>(null);
   const [peek, setPeek] = useState<string | null>(null);
+  const [edit, setEdit] = useState(false);
   const f = w.facts;
   const type: StreetType = f?.type ?? "residential";
   const openCats = open ?? ORDER[type].slice(0, 2);
@@ -37,30 +38,42 @@ export default function Choose({ w, setW, onMake, onBack, openMenu }: {
           <img src={w.photo} alt="Your street today" />
           {w.street && <strong style={{ fontSize: 18 }}>{w.street}</strong>}
           <div className="read" aria-live="polite">
-            <strong>How we read your street</strong>
             {!f ? <span className="muted">Looking at your photo…</span> : (
               <>
-                {w.readError && <span className="muted">We couldn’t read the photo ({w.readError}). Please check these:</span>}
+                {w.readError && <span className="muted">We couldn’t read the photo, so please check these. ({w.readError})</span>}
                 {f.isStreet === false && <span className="error">This doesn’t look like a street. The image works best with a photo from the sidewalk, looking along the street.</span>}
-                <label>Street type
-                  <select value={f.type} onChange={(e) => setFact("type", e.target.value as StreetType)}>
-                    <option value="residential">Residential</option><option value="high">High street</option>
-                  </select>
-                </label>
-                <label>Parked cars
-                  <select value={f.parking} onChange={(e) => setFact("parking", e.target.value as Facts["parking"])}>
-                    <option value="none">None</option><option value="parallel">Along the kerb</option><option value="angled">At an angle</option>
-                  </select>
-                </label>
-                <label>Trees
-                  <select value={f.treeSide} onChange={(e) => setFact("treeSide", e.target.value as Facts["treeSide"])}>
-                    <option value="both">Both sides</option><option value="left">Left side</option><option value="right">Right side</option><option value="none">None</option>
-                  </select>
-                </label>
-                <label>Tram or bus lane
-                  <input type="checkbox" checked={f.tram} onChange={(e) => setFact("tram", e.target.checked)} />
-                </label>
-                <span className="muted">Not right? Change it — the image follows what you set here.</span>
+                {!(edit || w.readError) ? (
+                  <p className="summary">
+                    We read: <b>{f.type === "high" ? "High street" : "Residential"}</b>
+                    {" · "}<b>{{ none: "no parked cars", parallel: "cars parked along the kerb", angled: "cars parked at an angle" }[f.parking]}</b>
+                    {" · "}<b>{{ both: "trees on both sides", left: "trees on the left", right: "trees on the right", none: "no trees" }[f.treeSide]}</b>
+                    {f.tram && <>{" · "}<b>tram or bus lane</b></>}
+                    {" "}<button className="link" onClick={() => setEdit(true)} aria-expanded={false}>Change</button>
+                  </p>
+                ) : (
+                  <>
+                    <strong>How we read your street</strong>
+                    <label>Street type
+                      <select value={f.type} onChange={(e) => setFact("type", e.target.value as StreetType)}>
+                        <option value="residential">Residential</option><option value="high">High street</option>
+                      </select>
+                    </label>
+                    <label>Parked cars
+                      <select value={f.parking} onChange={(e) => setFact("parking", e.target.value as Facts["parking"])}>
+                        <option value="none">None</option><option value="parallel">Along the kerb</option><option value="angled">At an angle</option>
+                      </select>
+                    </label>
+                    <label>Trees
+                      <select value={f.treeSide} onChange={(e) => setFact("treeSide", e.target.value as Facts["treeSide"])}>
+                        <option value="both">Both sides</option><option value="left">Left side</option><option value="right">Right side</option><option value="none">None</option>
+                      </select>
+                    </label>
+                    <label>Tram or bus lane
+                      <input type="checkbox" checked={f.tram} onChange={(e) => setFact("tram", e.target.checked)} />
+                    </label>
+                    {!w.readError && <button className="link" style={{ alignSelf: "flex-start" }} onClick={() => setEdit(false)}>Done</button>}
+                  </>
+                )}
               </>
             )}
           </div>

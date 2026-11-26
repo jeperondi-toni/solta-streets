@@ -50,7 +50,6 @@ export const CATEGORIES: Category[] = [
     { id: "sit", title: "Places to sit", desc: "Wooden benches with a backrest, facing the life of the street.", t: ALL },
     { id: "play", title: "Something to play on", desc: "Logs, stumps and a beam to climb and balance on, away from cars.", t: ALL },
     { id: "sports", title: "Sports in public space", desc: "A table-tennis table or outdoor fitness.", t: [R] },
-    { id: "gardening", title: "Space for gardening", desc: "Planters neighbours can sow and look after.", t: [R] },
     { id: "bike", title: "Bike parking", desc: "Racks, so bikes leave the sidewalk.", t: ALL },
     { id: "stop", title: "A better bus or tram stop", desc: "A shelter with a green roof, a bench and some planting.", t: [H] },
   ]},

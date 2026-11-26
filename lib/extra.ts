@@ -49,12 +49,6 @@ export const EXTRA = {
     alone: (o: O) => `Sports: a grey concrete table-tennis table on the wider sidewalk along the building side${o.parking ? " (or in one parking space on the RIGHT, enclosed by a low planted edge towards the road; remove that car only)" : ""}, with a set of 3 simple steel outdoor fitness bars beside it. Never next to the road without a planted edge, never in front of a door, shop or garage; 1.5 m clear walking path.`,
     after: () => `Sports: on the widened sidewalk along the building side, a grey concrete table-tennis table and 3 simple steel outdoor fitness bars, with the walking path and the rain gardens between them and the lane.`,
   },
-  gardening: {
-    name: "Space for gardening", cat: "People and play",
-    zone: "KERB EDGE: a few big wooden planters for neighbours to sow.",
-    alone: () => `Space for gardening: along the kerb edge, 3 large wooden planter boxes about 1.5 m long and 70 cm high, with herbs, flowers and young vegetables, each with a small blank wooden tag (no text). At least 1.5 m clear walking path; not in front of doors, shops or garages.`,
-    after: () => `Space for gardening: on the widened sidewalk, 3 large wooden planter boxes about 1.5 m long and 70 cm high with herbs, flowers and young vegetables, next to the rain gardens.`,
-  },
   shopsasis: {
     name: "Same shops, fresher fronts", cat: "Business",
     zone: "SHOP FRONTS: small touches only, the architecture unchanged.",

@@ -29,3 +29,6 @@ export function renderStep(facts: Facts, choices: { cars: string; bikes: string;
 }
 
 export const sendToChorus = (image: string, title: string) => post<{ url: string }>("/api/chorus", { image, title });
+
+export const streetView = (address: string, turn = 0) =>
+  post<{ found: boolean; image?: string; message?: string }>("/api/streetview", { address, turn });

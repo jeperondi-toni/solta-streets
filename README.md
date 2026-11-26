@@ -33,6 +33,7 @@ Vercel project, framework **Vite**. Environment variables (tick Production **and
 | Name | What |
 | --- | --- |
 | `GEMINI_API_KEY` | Google AI key (same as TYSS is fine) |
+| `GOOGLE_MAPS_API_KEY` | Street View Static API + Geocoding API (same key as TYSS) — for the address option |
 | `CHORUS_URL` | e.g. `https://chorus.solta.city` — without it "Ask my community" shows the error |
 
 Local: `npm install`, then `vercel dev` (needs the Vercel CLI for the `api/` routes).

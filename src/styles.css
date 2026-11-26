@@ -174,3 +174,12 @@ h2.q { margin: 0 0 6px; font-size: 30px; }
 .bikes h3 { margin: 0; font-size: 20px; }
 .radios.small { margin: 0; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
 .radios.small .radio strong { font-size: 17px; }
+
+.modes { display: flex; gap: 6px; padding: 4px; border-radius: 9999px; background: var(--soft); }
+.modes button { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; border: none; border-radius: 9999px; background: none; cursor: pointer; font-weight: 700; font-size: 16px; color: var(--ink-2); }
+.modes button[aria-selected="true"] { background: var(--ink); color: #FFFFFF; }
+.modes small { font-size: 11px; font-weight: 400; text-transform: uppercase; letter-spacing: .06em; opacity: .7; }
+.field .row { display: flex; gap: 8px; align-items: center; }
+.sv { display: flex; flex-direction: column; gap: 8px; }
+.sv img { border-radius: 12px; }
+.sv-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }

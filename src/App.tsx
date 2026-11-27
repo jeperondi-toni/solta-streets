@@ -10,6 +10,8 @@ import Menu from "./screens/Menu";
 
 export type Screen = "home" | "choose" | "making" | "result";
 
+export interface Version { image: string; cars: Cars; bikes: Bikes; picks: string[]; other: string }
+
 export interface Work {
   photo: string;          // the user's photo, resized JPEG data URL
   street: string;         // "Which street?"
@@ -19,10 +21,12 @@ export interface Work {
   bikes: Bikes;
   picks: string[];
   other: string;
-  result: string;         // final image
+  result: string;         // final image shown
+  versions: Version[];    // every render of this photo, newest last
+  shown: number;          // which version is on screen
 }
 
-const EMPTY: Work = { photo: "", street: "", facts: null, readError: "", cars: "carfree", bikes: "path", picks: [], other: "", result: "" };
+const EMPTY: Work = { photo: "", street: "", facts: null, readError: "", cars: "carfree", bikes: "path", picks: [], other: "", result: "", versions: [], shown: -1 };
 const FALLBACK: Facts = { type: "residential", parking: "parallel", treeSide: "both", tram: false, desc: "" };
 
 export default function App() {
@@ -56,7 +60,7 @@ export default function App() {
         image = r.image;
         setProgress({ step: s + 1, steps, error: "" });
       }
-      setW((p) => ({ ...p, result: image }));
+      setW((p) => ({ ...p, result: image, shown: p.versions.length, versions: [...p.versions, { image, cars: p.cars, bikes: p.bikes, picks: p.picks, other: p.other }] }));
       setScreen("result");
     } catch (e) {
       setProgress((p) => ({ ...p, error: String((e as Error).message ?? e) }));
@@ -68,7 +72,7 @@ export default function App() {
       {screen === "home" && <Home onStart={start} openMenu={setMenu} />}
       {screen === "choose" && <Choose w={w} setW={setW} onMake={make} onBack={() => setScreen("home")} openMenu={setMenu} />}
       {screen === "making" && <Making photo={w.photo} progress={progress} onRetry={make} onBack={() => setScreen("choose")} openMenu={setMenu} />}
-      {screen === "result" && <Result w={w} onChange={() => setScreen("choose")} onAnother={() => { setW(EMPTY); setScreen("home"); }} openMenu={setMenu} />}
+      {screen === "result" && <Result w={w} onShow={(i) => setW((p) => { const v = p.versions[i]; return { ...p, shown: i, result: v.image, cars: v.cars, bikes: v.bikes, picks: v.picks, other: v.other }; })} onChange={() => setScreen("choose")} onAnother={() => { setW(EMPTY); setScreen("home"); }} openMenu={setMenu} />}
       {menu !== null && <Menu page={menu} setPage={setMenu} onClose={() => setMenu(null)} />}
     </>
   );

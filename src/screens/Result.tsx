@@ -50,7 +50,7 @@ function Pinned({ image, small }: { image: string; small?: boolean }) {
   );
 }
 
-export default function Result({ w, onChange, onAnother, openMenu }: { w: Work; onChange: () => void; onAnother: () => void; openMenu: (p: string) => void }) {
+export default function Result({ w, onShow, onChange, onAnother, openMenu }: { w: Work; onShow: (i: number) => void; onChange: () => void; onAnother: () => void; openMenu: (p: string) => void }) {
   const [busy, setBusy] = useState("");
   const [msg, setMsg] = useState("");
   const [ask, setAsk] = useState(false);
@@ -114,6 +114,22 @@ export default function Result({ w, onChange, onAnother, openMenu }: { w: Work; 
           {msg && <p className="error" role="alert">{msg}</p>}
         </div>
 
+        <section className="versions" aria-labelledby="ver-t">
+          <div>
+            <h2 id="ver-t">Try other changes</h2>
+            <p className="muted">Same photo, other choices. Every version stays here, so you can compare and share the one you like best.</p>
+          </div>
+          <div className="ver-list">
+            {w.versions.map((v, i) => (
+              <button key={i} className="ver" aria-pressed={i === w.shown} onClick={() => onShow(i)}>
+                <img src={v.image} alt="" />
+                <span>Version {i + 1} · {CARS.find((c) => c.id === v.cars)!.title}{v.picks.length ? ` + ${v.picks.length}` : ""}</span>
+              </button>
+            ))}
+            <button className="ver new" onClick={onChange}><span aria-hidden="true">+</span>Change my choices</button>
+          </div>
+        </section>
+
         <section className="panel">
           <h2>What changed</h2>
           <ul className="changed">
@@ -144,7 +160,6 @@ export default function Result({ w, onChange, onAnother, openMenu }: { w: Work; 
         </section>
 
         <div className="actions">
-          <button className="btn ghost" onClick={onChange}>← Change my choices</button>
           <button className="btn ghost" onClick={onAnother}>Try another street</button>
           <button className="btn ghost" onClick={() => openMenu("steps")}>What can I do next?</button>
         </div>

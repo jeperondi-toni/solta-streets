@@ -183,3 +183,14 @@ h2.q { margin: 0 0 6px; font-size: 30px; }
 .sv { display: flex; flex-direction: column; gap: 8px; }
 .sv img { border-radius: 12px; }
 .sv-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+
+.versions { display: flex; flex-direction: column; gap: 14px; }
+.versions h2 { margin: 0 0 4px; font-size: 26px; }
+.versions p { margin: 0; }
+.ver-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+.ver { display: flex; flex-direction: column; gap: 6px; padding: 6px; border: 2px solid var(--line); border-radius: 14px; background: #FFFFFF; cursor: pointer; text-align: left; font-size: 14px; font-weight: 700; }
+.ver img { aspect-ratio: 4 / 3; object-fit: cover; border-radius: 10px; width: 100%; }
+.ver span { padding: 0 4px 4px; }
+.ver[aria-pressed="true"] { border-color: var(--ink); background: var(--lime-soft); }
+.ver.new { align-items: center; justify-content: center; min-height: 150px; border-style: dashed; color: var(--ink-2); font-size: 16px; }
+.ver.new span:first-child { font-size: 34px; line-height: 1; padding: 0; }

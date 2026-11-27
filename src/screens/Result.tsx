@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-import QRCode from "qrcode";
 import type { Work } from "../App";
 import { sendToChorus } from "../api";
 import { sideBySide } from "../image";
@@ -70,11 +69,22 @@ export default function Result({ w, onShow, onChange, onAnother, openMenu }: { w
     setBusy("");
   };
 
-  const siteUrl = window.location.origin;
-  const [qr, setQr] = useState("");
-  const showQr = async () => {
-    try { setQr(await QRCode.toDataURL(siteUrl, { width: 480, margin: 1, color: { dark: "#1A2418", light: "#FFFFFF" } })); }
-    catch (e) { setMsg(`Could not make the QR code: ${(e as Error).message}`); }
+  // WhatsApp gets the image itself, not a link: on phones through the share sheet;
+  // where a browser can't share files (most desktops), we download it and open WhatsApp with the text.
+  const whatsapp = async () => {
+    setBusy("whatsapp"); setMsg("");
+    try {
+      const img = await shared();
+      const file = new File([await (await fetch(img)).blob()], "could-be.jpg", { type: "image/jpeg" });
+      if (navigator.canShare?.({ files: [file] })) {
+        await navigator.share({ files: [file], text: shareText });
+      } else {
+        const a = document.createElement("a"); a.href = img; a.download = file.name; a.click();
+        window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, "_blank", "noopener");
+        setMsg("We downloaded the image — attach it in the WhatsApp chat that just opened.");
+      }
+    } catch (e) { if ((e as Error).name !== "AbortError") setMsg(`Could not share: ${(e as Error).message}`); }
+    setBusy("");
   };
 
   const chorus = async () => {
@@ -101,8 +111,7 @@ export default function Result({ w, onShow, onChange, onAnother, openMenu }: { w
             <h2 id="share-t">Share it</h2>
             <div className="actions">
               <button className="btn small" onClick={download} disabled={!!busy}>Download</button>
-              <a className="btn ghost small" href={`https://wa.me/?text=${encodeURIComponent(shareText + " " + siteUrl)}`} target="_blank" rel="noopener">WhatsApp</a>
-              <button className="btn ghost small" onClick={showQr}>QR code</button>
+              <button className="btn ghost small" onClick={whatsapp} disabled={!!busy}>WhatsApp</button>
             </div>
           </section>
           {msg && <p className="error" role="alert">{msg}</p>}
@@ -158,20 +167,6 @@ export default function Result({ w, onShow, onChange, onAnother, openMenu }: { w
           <button className="btn ghost" onClick={() => openMenu("steps")}>What can I do next?</button>
         </div>
       </main>
-
-      {qr && (
-        <div className="overlay" onClick={() => setQr("")}>
-          <div className="dialog" role="dialog" aria-modal="true" aria-labelledby="qr-t" onClick={(e) => e.stopPropagation()} style={{ alignItems: "center", textAlign: "center" }}>
-            <h3 id="qr-t">Scan to imagine your street</h3>
-            <img src={qr} alt={`QR code to ${siteUrl}`} style={{ width: 260, height: 260 }} />
-            <p className="muted" style={{ margin: 0 }}>Put it on a poster, a flyer or a slide, so neighbours can make their own image.</p>
-            <div className="actions" style={{ justifyContent: "center" }}>
-              <a className="btn small" href={qr} download="street-qr.png">Download QR</a>
-              <button className="btn ghost small" onClick={() => setQr("")}>Close</button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {ask && (
         <div className="overlay" onClick={() => setAsk(false)}>

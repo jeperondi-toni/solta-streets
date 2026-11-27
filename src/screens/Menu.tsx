@@ -12,7 +12,9 @@ const TYSS = "https://transformyourschoolstreet.com";
 export default function Menu({ page, setPage, onClose }: { page: string; setPage: (p: string) => void; onClose: () => void }) {
   useEffect(() => {
     const k = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", k); return () => window.removeEventListener("keydown", k);
+    window.addEventListener("keydown", k);
+    const prev = document.body.style.overflow; document.body.style.overflow = "hidden"; // the page behind does not scroll
+    return () => { window.removeEventListener("keydown", k); document.body.style.overflow = prev; };
   }, [onClose]);
 
   return (

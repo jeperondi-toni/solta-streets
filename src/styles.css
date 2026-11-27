@@ -216,3 +216,11 @@ h2.q { margin: 0 0 6px; font-size: 30px; }
   .pinned { height: 240px; }
   .dialog { padding: 20px; max-height: calc(100vh - 36px); overflow: auto; }
 }
+
+.sharebar h2 { margin: 0; }
+.sharebar .btn.small { min-height: 44px; padding: 0 20px; font-size: 15px; }
+@media (max-width: 640px) {
+  .sharebar .actions { grid-template-columns: repeat(3, 1fr); }
+  .sharebar .actions .btn:first-child { grid-column: auto; }
+  .sharebar .actions .btn { min-height: 44px; padding: 0 8px; font-size: 14px; }
+}

@@ -22,7 +22,7 @@ export const DEFAULT_BIKES: Record<Cars, Bikes> = { keep: "none", calm: "none", 
 
 export const CARS: { id: Cars; step: string; title: string; desc: string; incl: string }[] = [
   { id: "keep", step: "1 · Small step", title: "Same traffic, better edges", desc: "Cars, tram and bikes as today. We improve the sidewalks around them.", incl: "Parking in small groups · gardens at the kerb" },
-  { id: "calm", step: "2 · Halfway", title: "Slow street", desc: "One slow lane where cars are guests. Some parking stays, in groups between gardens.", incl: "Raised crossing · wider sidewalks" },
+  { id: "calm", step: "2 · Halfway", title: "Slow street", desc: "One slow lane where cars are guests. A little parking on one side; the other side becomes a wide sidewalk.", incl: "Raised crossing · wider sidewalks" },
   { id: "carfree", step: "3 · The big change", title: "Car-free", desc: "A level street for people. Deliveries at set hours.", incl: "No kerbs · no parking · tram kept" },
 ];
 

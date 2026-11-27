@@ -62,20 +62,21 @@ ZONES:
 ZONES:
 - LEFT and RIGHT: the rain gardens along the kerb edge; the rest of each sidewalk stays open for walking.
 - Everything else unchanged.${keepInfra}${keepClear}`;
-  const oneSided = o.treeSide !== "both";
+  // Slow street (Jess, 27 Nov): parking on ONE side only, the other sidewalk much wider,
+  // never planting along the side of a parked car.
   const L = o.treeSide === "right" ? "RIGHT" : "LEFT";
   const W = L === "LEFT" ? "RIGHT" : "LEFT";
   const s2asym = `CHANGES TO MAKE:
-1. Slow street with the lane on one side: ONE lane, just wide enough for one car (about 3 m), moved next to the ${L} kerb. Its surface becomes red-brown brick pavers instead of asphalt. Remove the white road markings. On the ${L} side, between the lane and the kerb, a parking strip in red-brown brick pavers for a few cars: a rhythm of TWO parallel parking spaces and ONE rain garden bump-out (about 5 m, low granite kerb, low planting).${o.parking ? " The parking spaces stay clearly visible and in use: keep the parked cars that stand in them." : " The spaces are clearly marked and empty."}
-2. The ${W} sidewalk becomes much wider: all the space between the lane and the ${W} buildings becomes sidewalk, at sidewalk height, in exactly the same stone, colour and pattern as the existing sidewalk, as if it had always been one sidewalk, with no visible seam. Use the existing sidewalk paving in the photo as the sample and copy it: never a different, lighter or newer stone.${o.parking ? ` Remove every parked car on the ${W} side.` : ""}
-3. On this wide ${W} sidewalk, along the edge of the lane: a row of rain gardens with a young tree every 8 m and low planting (grasses, shrubs), with gaps to cross. Behind them, a broad open walking area up to the buildings.${o.trees ? ` The existing trees on the ${L} side stay in place, each with a small planted bed around its base.` : ""}
-4. In the foreground, a raised crossing: the brick lane rises to sidewalk level for about 4 m, with a pale stone band on each side.
+1. Slow street, parking on ONE side only: ONE lane, just wide enough for one car (about 3 m), moved next to the ${L} kerb. Its surface becomes red-brown brick pavers instead of asphalt. Remove the white road markings. On the ${L} side only, between the lane and the kerb, a parking strip in red-brown brick pavers for a FEW cars: groups of at most TWO parallel parking spaces, separated by a rain garden bump-out about 5 m long (low granite kerb, low planting). The parked cars stand directly next to the lane, with NOTHING between a car and the lane: no plants, no kerb, no bollards along the side of any car, so every car can drive out.${o.parking ? " Keep only the cars that stand in those spaces; remove all the others." : " The spaces are clearly marked and empty."}
+2. The ${W} side has NO parking at all${o.parking ? `: remove every parked car on the ${W} side, along the whole visible stretch` : ""}. The ${W} sidewalk becomes much wider: all the space between the lane and the ${W} buildings becomes sidewalk, at sidewalk height, in exactly the same stone, colour and pattern as the existing sidewalk, as if it had always been one sidewalk, with no visible seam. Use the existing sidewalk paving in the photo as the sample and copy it: never a different, lighter or newer stone.
+3. On this wide ${W} sidewalk, along the edge of the lane: a row of rain gardens with a young tree every 8 m and low planting (grasses, shrubs), with gaps to cross. Behind them, a broad open walking area up to the buildings.${o.trees ? " All existing trees stay in their exact place, each with a small planted bed around its base." : ""}
+4. In the foreground, a raised crossing: the brick lane rises to sidewalk level for about 4 m, with a pale stone band on each side; no parked car within 5 m of it.
 
 ZONES:
-- ${L}: the narrow brick lane with the parking strip (two spaces, one bump-out) along the ${L} kerb; the ${L} sidewalk keeps its width.
-- ${W}: a very wide sidewalk, clearly wider than the lane, with the row of rain gardens and young trees along the lane and open walking space behind.
+- ${L}: the narrow brick lane with a short parking strip along the ${L} kerb (two spaces, one bump-out, repeating); the ${L} sidewalk keeps its width.
+- ${W}: no cars; a very wide sidewalk, clearly wider than the lane, with the row of rain gardens and young trees along the lane and open walking space behind.
 - FOREGROUND: the raised crossing.${keepInfra}${keepClear}`;
-  const s2 = oneSided ? s2asym : o.parking
+  const s2 = true ? s2asym : o.parking
     ? `CHANGES TO MAKE:
 1. Slow street: narrow the roadway to ONE lane, just wide enough for one car (about 3 m), clearly narrower than today. Its surface becomes red-brown brick pavers instead of asphalt, so it reads as a slow shared street. Remove the white road markings. The parking strip and the kerb move in towards the narrower lane, and the width freed is added to the sidewalks, exactly the same stone, colour and pattern as the existing sidewalks, as if it had always been one sidewalk, with no visible seam. Use the existing sidewalk paving in the photo as the sample and copy it: never a different, lighter or newer stone.
 2. Fewer parking spaces, grouped: ${angled ? "the angled parking becomes parallel parking along the kerb. " : ""}On BOTH sides, along the whole visible stretch, alternate TWO parking spaces with ONE rain garden bump-out. The parking spaces stay clearly visible and in use: keep the parked cars that stand in them; remove only the car where a bump-out goes.

@@ -12,6 +12,7 @@ Describe only what you can see. Answer in JSON with these fields:
 - isStreet: true if this is a photo of a street outdoors, false otherwise.
 - type: "high" if there are shops, cafés or businesses on the ground floors along the street, otherwise "residential".
 - parking: "none" if no cars are parked along the street, "parallel" if cars park lengthwise along the kerb, "angled" if they park at an angle or perpendicular.
+- parkSide: if cars are parked, on which side: "both", "left" or "right" (as seen in the photo); "both" if none.
 - treeSide: where trees stand in the sidewalks: "both", "left", "right" or "none" (left and right as seen in the photo).
 - tram: true if tram tracks, overhead tram wires or a bus lane run along the street.
 - desc: one plain sentence describing the street (buildings, lanes, sidewalks, parking, trees), at most 30 words, no opinions.`;
@@ -22,11 +23,12 @@ const SCHEMA = {
     isStreet: { type: "BOOLEAN" },
     type: { type: "STRING", enum: ["high", "residential"] },
     parking: { type: "STRING", enum: ["none", "parallel", "angled"] },
+    parkSide: { type: "STRING", enum: ["both", "left", "right"] },
     treeSide: { type: "STRING", enum: ["both", "left", "right", "none"] },
     tram: { type: "BOOLEAN" },
     desc: { type: "STRING" },
   },
-  required: ["isStreet", "type", "parking", "treeSide", "tram", "desc"],
+  required: ["isStreet", "type", "parking", "parkSide", "treeSide", "tram", "desc"],
 };
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {

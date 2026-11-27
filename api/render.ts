@@ -18,6 +18,7 @@ function parseFacts(f: any): Facts {
   return {
     type: f?.type === "high" ? "high" : "residential",
     parking: f?.parking === "parallel" || f?.parking === "angled" ? f.parking : false,
+    parkSide: ["left", "right"].includes(f?.parkSide) ? f.parkSide : "both",
     trees: ["both", "left", "right"].includes(f?.treeSide),
     treeSide: ["both", "left", "right"].includes(f?.treeSide) ? f.treeSide : "none",
     tram: !!f?.tram,

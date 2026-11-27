@@ -24,7 +24,7 @@ The existing trees stay exactly where they are, with the same size and shape.
 Perspective and camera angle must stay identical.
 Photorealistic, same light, shadows and weather as the original photo.`;
 
-export type Facts = { type: 'high' | 'residential'; parking: false | 'parallel' | 'angled'; trees: boolean; treeSide: 'both' | 'left' | 'right' | 'none'; tram: boolean; desc?: string };
+export type Facts = { type: 'high' | 'residential'; parking: false | 'parallel' | 'angled'; parkSide?: 'both' | 'left' | 'right'; trees: boolean; treeSide: 'both' | 'left' | 'right' | 'none'; tram: boolean; desc?: string };
 
 export function scenarioPrompts(o: Facts) {
   const high = o.type === "high";
@@ -64,16 +64,20 @@ ZONES:
 - Everything else unchanged.${keepInfra}${keepClear}`;
   // Slow street (Jess, 27 Nov): parking on ONE side only, the other sidewalk much wider,
   // never planting along the side of a parked car.
-  const L = o.treeSide === "right" ? "RIGHT" : "LEFT";
+  // Parking side: where cars park today if only one side; else the tree side; else LEFT.
+  const L = o.parking && (o.parkSide === "left" || o.parkSide === "right") ? o.parkSide.toUpperCase() : o.treeSide === "right" ? "RIGHT" : "LEFT";
   const W = L === "LEFT" ? "RIGHT" : "LEFT";
+  const parkL = o.parking === "angled"
+    ? `On the ${L} side only, KEEP the angled parking exactly as it is today: the same angled bays, each one opening directly onto the lane, so every car drives straight out. Nothing in front of, behind or between the bays and the lane: no plants, no kerb, no benches, no bollards. Keep the cars that stand in those bays.`
+    : `On the ${L} side only, between the lane and the kerb, a parking strip in red-brown brick pavers for a FEW cars: groups of at most TWO parallel parking spaces, separated by a rain garden bump-out about 5 m long (low granite kerb, low planting). The parked cars stand directly next to the lane, with NOTHING between a car and the lane: no plants, no kerb, no bollards along the side of any car, so every car can drive out.${o.parking ? " Keep only the cars that stand in those spaces; remove all the others." : " The spaces are clearly marked and empty."}`;
   const s2asym = `CHANGES TO MAKE:
-1. Slow street, parking on ONE side only: ONE lane, just wide enough for one car (about 3 m), moved next to the ${L} kerb. Its surface becomes red-brown brick pavers instead of asphalt. Remove the white road markings. On the ${L} side only, between the lane and the kerb, a parking strip in red-brown brick pavers for a FEW cars: groups of at most TWO parallel parking spaces, separated by a rain garden bump-out about 5 m long (low granite kerb, low planting). The parked cars stand directly next to the lane, with NOTHING between a car and the lane: no plants, no kerb, no bollards along the side of any car, so every car can drive out.${o.parking ? " Keep only the cars that stand in those spaces; remove all the others." : " The spaces are clearly marked and empty."}
-2. The ${W} side has NO parking at all${o.parking ? `: remove every parked car on the ${W} side, along the whole visible stretch` : ""}. The ${W} sidewalk becomes much wider: all the space between the lane and the ${W} buildings becomes sidewalk, at sidewalk height, in exactly the same stone, colour and pattern as the existing sidewalk, as if it had always been one sidewalk, with no visible seam. Use the existing sidewalk paving in the photo as the sample and copy it: never a different, lighter or newer stone.
+1. Slow street, parking on ONE side only: ONE lane, just wide enough for one car (about 3 m), moved next to the ${L} parking. Its surface becomes red-brown brick pavers instead of asphalt. Remove the white road markings. ${parkL}
+2. The ${W} side is CLOSED to parking: remove EVERY parked car on the ${W} side, along the whole visible stretch, including far down the street. No car stands anywhere on the ${W} side. The ${W} sidewalk becomes much wider: all the space between the lane and the ${W} buildings becomes sidewalk, at sidewalk height, in exactly the same stone, colour and pattern as the existing sidewalk, as if it had always been one sidewalk, with no visible seam. Use the existing sidewalk paving in the photo as the sample and copy it: never a different, lighter or newer stone.
 3. On this wide ${W} sidewalk, along the edge of the lane: a row of rain gardens with a young tree every 8 m and low planting (grasses, shrubs), with gaps to cross. Behind them, a broad open walking area up to the buildings.${o.trees ? " All existing trees stay in their exact place, each with a small planted bed around its base." : ""}
 4. In the foreground, a raised crossing: the brick lane rises to sidewalk level for about 4 m, with a pale stone band on each side; no parked car within 5 m of it.
 
 ZONES:
-- ${L}: the narrow brick lane with a short parking strip along the ${L} kerb (two spaces, one bump-out, repeating); the ${L} sidewalk keeps its width.
+- ${L}: ${o.parking === "angled" ? "the angled parking as today, opening onto the narrow brick lane" : "the narrow brick lane with a short parking strip along the kerb (two spaces, one bump-out, repeating)"}; the ${L} sidewalk keeps its width.
 - ${W}: no cars; a very wide sidewalk, clearly wider than the lane, with the row of rain gardens and young trees along the lane and open walking space behind.
 - FOREGROUND: the raised crossing.${keepInfra}${keepClear}`;
   const s2 = true ? s2asym : o.parking

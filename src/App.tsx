@@ -27,7 +27,7 @@ export interface Work {
 }
 
 const EMPTY: Work = { photo: "", street: "", facts: null, readError: "", cars: "carfree", bikes: "path", picks: [], other: "", result: "", versions: [], shown: -1 };
-const FALLBACK: Facts = { type: "residential", parking: "parallel", treeSide: "both", tram: false, desc: "" };
+const FALLBACK: Facts = { type: "residential", parking: "parallel", parkSide: "both", treeSide: "both", tram: false, desc: "" };
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>("home");

@@ -46,7 +46,7 @@ export default function Choose({ w, setW, onMake, onBack, openMenu }: {
                 {!(edit || w.readError) ? (
                   <p className="summary">
                     We read: <b>{f.type === "high" ? "High street" : "Residential"}</b>
-                    {" · "}<b>{{ none: "no parked cars", parallel: "cars parked along the kerb", angled: "cars parked at an angle" }[f.parking]}</b>
+                    {" · "}<b>{{ none: "no parked cars", parallel: "cars parked along the kerb", angled: "cars parked at an angle" }[f.parking]}{f.parking !== "none" && f.parkSide !== "both" ? ` on the ${f.parkSide}` : ""}</b>
                     {" · "}<b>{{ both: "trees on both sides", left: "trees on the left", right: "trees on the right", none: "no trees" }[f.treeSide]}</b>
                     {f.tram && <>{" · "}<b>tram or bus lane</b></>}
                     {" "}<button className="link" onClick={() => setEdit(true)} aria-expanded={false}>Change</button>
@@ -64,6 +64,13 @@ export default function Choose({ w, setW, onMake, onBack, openMenu }: {
                         <option value="none">None</option><option value="parallel">Along the kerb</option><option value="angled">At an angle</option>
                       </select>
                     </label>
+                    {f.parking !== "none" && (
+                      <label>Parked on
+                        <select value={f.parkSide} onChange={(e) => setFact("parkSide", e.target.value as Facts["parkSide"])}>
+                          <option value="both">Both sides</option><option value="left">Left side</option><option value="right">Right side</option>
+                        </select>
+                      </label>
+                    )}
                     <label>Trees
                       <select value={f.treeSide} onChange={(e) => setFact("treeSide", e.target.value as Facts["treeSide"])}>
                         <option value="both">Both sides</option><option value="left">Left side</option><option value="right">Right side</option><option value="none">None</option>

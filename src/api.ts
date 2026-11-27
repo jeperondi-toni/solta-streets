@@ -3,6 +3,7 @@
 export interface Facts {
   type: "residential" | "high";
   parking: "none" | "parallel" | "angled";
+  parkSide: "both" | "left" | "right";
   treeSide: "both" | "left" | "right" | "none";
   tram: boolean;
   desc: string;
